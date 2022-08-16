@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html charset=utf-8"></meta>
+    <title>GraphicsCard</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/graphicsCard.js"></script>
+
+</head>
+<body ng-app="graphicsCards" ng-controller="graphicsCardsController">
+
+<div sec:authorize="isAnonymous()" >
+    <!--    <h3><a href="/login">Login</a></h3>-->
+    <form name="loginForm" th:action="@{/login}">
+        <input type="submit"  class="btn btn-primary" th:value="#{login}"/>
+    </form>
+</div>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <form name="logoutForm" th:action="@{/logout}" method="post">
+        <input type="submit"  class="btn btn-primary" th:value="#{logout}"/>
+    </form>
+</div>
+
+<h2 th:text="#{graphicsCard.graphicsCard}">Здесь будет слово Видеокарта на языке локали</h2>
+<div ng-controller="getGraphicsCards" ng-show="graphicsCardList.length > 0">
+    <table id="graphicsCardTable">
+        <thead>
+        <tr>
+            <th><h4 th:text="#{id.id}"></h4></th>
+            <th><h4 th:text="#{company.company}"></h4></th>
+            <th><h4 th:text="#{model.model}"></h4></th>
+            <th><h4 th:text="#{price.price}"></h4></th>
+            <th><h4 th:text="#{amount.amount}"></h4></th>
+            <th><div sec:authorize="isAuthenticated()"><h4 th:text="#{action.action}"></h4></div></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="graphicsCard in graphicsCardList" id="{{graphicsCard.id}}">
+            <td>{{graphicsCard.id}}</td>
+            <td>{{graphicsCard.company}}</td>
+            <td>{{graphicsCard.model}}</td>
+            <td>{{graphicsCard.price}}</td>
+            <td>{{graphicsCard.amount}}</td>
+            <td><div sec:authorize="isAuthenticated()"><input type="button" th:value="#{remove.remove}" ng-click="deleteGraphicsCard(graphicsCard.id)"/></div></td>
+            <td><div sec:authorize="isAuthenticated()"><input type="button" th:value="#{update.update}"></div></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br><br><br>
+<div>
+    <form sec:authorize="isAuthenticated()" role="form" ng-submit="addGraphicsCard()">
+        <p><div class="form-group">
+        <label for="inputcompany" th:text="#{company.input}"></label>
+        <input type="text" class="form-control" id="inputcompany" name="inputcompany"  th:placeholder="#{company.company}" ng-model="inputcompany"> </input>
+    </div></p>
+        <p><div class="form-group">
+        <label for="inputmodel" th:text="#{model.input}"></label>
+        <input type="text" class="form-control" id="inputmodel" name="inputmodel"  th:placeholder="#{model.model}" ng-model="inputmodel"></input>
+    </div></p>
+        <p><div class="form-group">
+        <label for="inputprice" th:text="#{price.input}"></label>
+        <input type="number" class="form-control" id="inputprice" name="inputprice"  th:placeholder="#{price.price}" ng-model="inputprice"> </input>
+    </div></p>
+        <p> <div class="form-group">
+        <label for="inputamoutn" th:text="#{amount.input}"> </label>
+        <input type="number" class="form-control" id="inputamoutn" name="inputamoutn"  th:placeholder="#{amount.amount}" ng-model="inputamoutn"> </input>
+    </div></p>
+        <p><button type="submit" class="btn btn-default" th:text="#{addGraphicsCard}"></button></p>
+    </form>
+</div>
+</body>
+</html>

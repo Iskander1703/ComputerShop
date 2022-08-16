@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html charset=utf-8"></meta>
+    <title>Frames</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/frames.js"></script>
+
+</head>
+<body ng-app="frames" ng-controller="framesController">
+
+<div sec:authorize="isAnonymous()" >
+<!--    <h3><a href="/login">Login</a></h3>-->
+    <form name="loginForm" th:action="@{/login}">
+        <input type="submit"  class="btn btn-primary" th:value="#{login}"/>
+    </form>
+</div>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <form name="logoutForm" th:action="@{/logout}" method="post">
+        <input type="submit"  class="btn btn-primary" th:value="#{logout}"/>
+    </form>
+</div>
+
+<h2 th:text="#{frames.frames}">Здесь будет слово Корпус на языке локали</h2>
+<div ng-controller="getFrames" ng-show="frameList.length > 0">
+    <table id="frameTable">
+        <thead>
+        <tr>
+            <th><h4 th:text="#{id.id}">Здесь будет ИД на языке Локали</h4></th>
+            <th><h4 th:text="#{company.company}">Здесь будет  слово название компании на языке локали</h4></th>
+            <th><h4 th:text="#{model.model}">Здесь будет слово название модели на языке локали</h4></th>
+            <th><h4 th:text="#{price.price}">Здесь будет слово цена на языке локали</h4></th>
+            <th><h4 th:text="#{amount.amount}">Здесь будет слово количество на языке локали</h4></th>
+            <th><div sec:authorize="isAuthenticated()"><h4 th:text="#{action.action}">Здесь будет слово действие на языке локали</h4></div></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="frame in frameList" id="{{frame.id}}">
+            <td>{{frame.id}}</td>
+            <td>{{frame.company}}</td>
+            <td>{{frame.model}}</td>
+            <td>{{frame.price}}</td>
+            <td>{{frame.amount}}</td>
+            <td><div sec:authorize="isAuthenticated()"><input type="button" th:value="#{remove.remove}" ng-click="deleteFrame(frame.id)"/></div></td>
+            <td><div sec:authorize="isAuthenticated()"><input type="button" th:value="#{update.update}"></div></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br><br><br>
+<div>
+  <form sec:authorize="isAuthenticated()" role="form" ng-submit="addFrame()">
+      <p><div class="form-group">
+            <label for="inputcompany" th:text="#{company.input}"></label>
+            <input type="text" class="form-control" id="inputcompany" name="inputcompany"  th:placeholder="#{company.company}" ng-model="inputcompany"> </input>
+        </div></p>
+    <p><div class="form-group">
+            <label for="inputmodel" th:text="#{model.input}"></label>
+            <input type="text" class="form-control" id="inputmodel" name="inputmodel"  th:placeholder="#{model.model}" ng-model="inputmodel"></input>
+        </div></p>
+    <p><div class="form-group">
+            <label for="inputprice" th:text="#{price.input}"></label>
+            <input type="number" class="form-control" id="inputprice" name="inputprice"  th:placeholder="#{price.price}" ng-model="inputprice"> </input>
+        </div></p>
+    <p> <div class="form-group">
+            <label for="inputamoutn" th:text="#{amount.input}"> </label>
+            <input type="number" class="form-control" id="inputamoutn" name="inputamoutn"  th:placeholder="#{amount.amount}" ng-model="inputamoutn"> </input>
+        </div></p>
+        <p><button type="submit" class="btn btn-default" th:text="#{addFrame}"></button></p>
+    </form>
+</div>
+</body>
+</html>

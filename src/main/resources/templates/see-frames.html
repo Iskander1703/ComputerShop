@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html charset=utf-8"></meta>
+    <title>Frames</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/frames.js"></script>
+
+</head>
+<body ng-app="frames" ng-controller="framesController">
+
+<div sec:authorize="isAnonymous()" >
+    <!--    <h3><a href="/login">Login</a></h3>-->
+    <form name="loginForm" th:action="@{/login}">
+        <input type="submit"  class="btn btn-primary" value="Log in"/>
+    </form>
+</div>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <form name="logoutForm" th:action="@{/logout}" method="post">
+        <input type="submit"  class="btn btn-primary" value="Sign Out"/>
+    </form>
+</div>
+
+<h1>Computer Frames</h1>
+<div ng-controller="getFrames" ng-show="frameList.length > 0">
+    <table id="frameTable">
+        <thead>
+        <tr>
+            <th><h2>Id</h2></th>
+            <th><h2>Company</h2></th>
+            <th><h2>Model</h2></th>
+            <th><h2>Price</h2></th>
+            <th><h2>Amount</h2></th>
+            <th><div sec:authorize="isAuthenticated()"><h2>Action</h2></div></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="frame in frameList" id="{{frame.id}}">
+            <td>{{frame.id}}</td>
+            <td>{{frame.company}}</td>
+            <td>{{frame.model}}</td>
+            <td>{{frame.price}}</td>
+            <td>{{frame.amount}}</td>
+            <td><div sec:authorize="isAuthenticated()"><input type="button" value="Remove" ng-click="deleteFrame(frame.id)"/></div></td>
+            <td><div sec:authorize="isAuthenticated()"><input type="button" value="Update"></div></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <form role="form" ng-submit="addFrame()">
+        <div class="form-group">
+            <label for="inputcompany">Company name: </label>
+            <input type="text" class="form-control" id="inputcompany" name="inputcompany"  placeholder="Company name" ng-model="inputcompany"> </input>
+        </div>
+        <div class="form-group">
+            <label for="inputmodel">Model: </label>
+            <input type="text" class="form-control" id="inputmodel" name="inputmodel"  placeholder="Model" ng-model="inputmodel"> </input>
+        </div>
+        <div class="form-group">
+            <label for="inputprice">Price: </label>
+            <input type="number" class="form-control" id="inputprice" name="inputprice"  placeholder="Price" ng-model="inputprice"> </input>
+        </div>
+        <div class="form-group">
+            <label for="inputamoutn">Amount: </label>
+            <input type="number" class="form-control" id="inputamoutn" name="inputamoutn"  placeholder="Amount" ng-model="inputamoutn"> </input>
+        </div>
+        <button type="submit" class="btn btn-default">Add new frame</button>
+    </form>
+</div>
+</body>
+</html>
